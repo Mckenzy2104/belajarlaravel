@@ -2,77 +2,64 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $products = \App\Models\Product::all();
+        $products = Product::all();
         return view('products.index', compact('products'));
-        //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('products.create');
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
-        'nama_item' => 'required',
-        'harga' => 'required|integer',
-        'stok' => 'required|integer',
-        'deskripsi' => 'nullable',
-         ]);
+            'nama_item' => 'required',
+            'harga' => 'required|integer',
+            'stok' => 'required|integer',
+            'deskripsi' => 'nullable',
+        ]);
 
-    \App\Models\Product::create($data);
+        Product::create($data);
 
-    return redirect('/products');
-        //
+        return redirect('/products')->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(product $product)
+    public function show(Product $product)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(product $product)
+    public function edit(Product $product)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, product $product)
+    public function update(Request $request, Product $product)
     {
-        //
+        $data = $request->validate([
+            'nama_item' => 'required',
+            'harga' => 'required|integer',
+            'stok' => 'required|integer',
+            'deskripsi' => 'nullable',
+        ]);
+
+        $product->update($data);
+
+        return redirect('/products')->with('success', 'Produk berhasil diubah!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(product $product)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect('/products')->with('success', 'Produk berhasil dihapus!');
     }
 }
